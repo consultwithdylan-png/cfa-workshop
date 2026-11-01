@@ -175,3 +175,17 @@ footer .bottom{text-align:center;margin-top:24px}
 .vcard .who{padding:0 6px;color:var(--muted)}
 .yt.on{cursor:auto;background:#000}
 .yt.on::after{display:none}
+/* reasons v2 */
+.reason{display:flex;flex-direction:column;align-items:center;gap:12px}
+.ric{flex:none;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(180deg,rgba(56,182,255,.25),rgba(15,107,255,.15));border:1.5px solid var(--blue-2);box-shadow:0 0 18px -2px rgba(31,139,255,.7)}
+.ric svg{width:26px;height:26px;fill:none;stroke:var(--cyan);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.reasons{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:980px){
+  .reasons{grid-template-columns:1fr;gap:12px;max-width:520px;margin-left:auto;margin-right:auto}
+  .reasons .panel:last-child{grid-column:auto}
+  .reason{flex-direction:row;align-items:center;text-align:left;gap:16px;padding:16px 18px}
+  .reason>div:last-child{text-align:left}
+  .reason .big{white-space:nowrap}
+  .reason .big{font-size:30px;margin-bottom:2px}
+  .reason p{font-size:15px;font-weight:500;color:#cfe0ff}
+}
