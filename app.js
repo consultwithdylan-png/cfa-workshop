@@ -61,6 +61,10 @@ document.querySelectorAll(".yt[data-id]").forEach(function (b) {
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.allowFullscreen = true;
     f.title = b.getAttribute("aria-label") || "Video";
-    b.innerHTML = ""; b.appendChild(f);
+    // swap the button for a plain box so taps reach YouTube's own controls
+    var box = document.createElement("div");
+    box.className = b.className + " on";
+    box.appendChild(f);
+    b.replaceWith(box);
   });
 });

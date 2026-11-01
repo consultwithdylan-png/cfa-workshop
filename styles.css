@@ -173,3 +173,5 @@ footer .bottom{text-align:center;margin-top:24px}
 .vcard{padding:14px 14px 20px;gap:12px}
 .vcard h3{font-size:24px;padding:0 6px}
 .vcard .who{padding:0 6px;color:var(--muted)}
+.yt.on{cursor:auto;background:#000}
+.yt.on::after{display:none}
