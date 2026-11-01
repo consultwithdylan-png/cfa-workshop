@@ -49,3 +49,18 @@
     }).then(go, go);
   });
 })();
+
+// YouTube click-to-play (loads the player only when tapped)
+document.querySelectorAll(".yt[data-id]").forEach(function (b) {
+  var id = b.getAttribute("data-id");
+  b.style.backgroundImage = "url(https://i.ytimg.com/vi/" + id + "/hqdefault.jpg)";
+  b.addEventListener("click", function () {
+    if (b.querySelector("iframe")) return;
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0&modestbranding=1&playsinline=1";
+    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    f.allowFullscreen = true;
+    f.title = b.getAttribute("aria-label") || "Video";
+    b.innerHTML = ""; b.appendChild(f);
+  });
+});
