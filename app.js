@@ -1,6 +1,22 @@
 (function () {
   var C = window.CFA_CONFIG || {};
 
+  // Pick the next workshop that hasn't ended yet
+  var W = null;
+  (C.workshops || []).forEach(function (w) {
+    var end = new Date(w.start).getTime() + (C.workshopLengthHours || 2) * 3600000;
+    if (!W && end > Date.now()) W = w;
+  });
+  if (W) { C.workshopStart = W.start; C.workshopLabel = W.label; }
+
+  // "MM-DD-YYYY HH:MM" in Eastern time, the format GHL date fields accept
+  var ghlDate = function (iso) {
+    var p = {};
+    new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+      .formatToParts(new Date(iso)).forEach(function (x) { p[x.type] = x.value; });
+    return p.month + "-" + p.day + "-" + p.year + " " + p.hour + ":" + p.minute;
+  };
+
   document.querySelectorAll("[data-when]").forEach(function (el) {
     el.textContent = C.workshopLabel || "Date & time announced soon";
   });
@@ -36,7 +52,11 @@
       email: form.email.value.trim(),
       phone: form.phone.value.trim(),
       source: "cfa-workshop-landing",
-      page: location.href
+      page: location.href,
+      webinar_datetime: W ? ghlDate(W.start) : "",
+      webinar_iso: W ? W.start : "",
+      webinar_label: W ? W.label : "",
+      webinar_link: W ? W.zoom : ""
     };
     if (!data.first_name || !/^\S+@\S+\.\S+$/.test(data.email)) {
       msg.textContent = "Please add your first name and a valid email.";
