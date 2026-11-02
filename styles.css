@@ -214,3 +214,8 @@ footer .bottom{text-align:center;margin-top:24px}
 @keyframes livedot{0%{opacity:1;box-shadow:0 0 0 0 rgba(255,59,59,.75)}50%{opacity:.35}70%{box-shadow:0 0 0 7px rgba(255,59,59,0)}100%{opacity:1;box-shadow:0 0 0 0 rgba(255,59,59,0)}}
 .datebar .dot{width:11px;height:11px;border:2px solid #fff}
 @media (max-width:860px){.panel-head.dup{display:none}}
+
+/* headline v3: amount + "per month" on one line */
+.hero h1 .amtline{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.28em;margin:.06em 0 .04em}
+.hero h1 .amtline .amt{display:inline;font-size:1.32em;margin:0}
+.hero h1 .amtline .pm{font-size:.78em}
