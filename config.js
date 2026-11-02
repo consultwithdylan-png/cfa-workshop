@@ -8,7 +8,7 @@ window.CFA_CONFIG = {
 
   // GoHighLevel inbound webhook URL (Automation > Workflow > Inbound Webhook trigger).
   // Form sends: first_name, email, phone, source. Leave "" while testing.
-  ghlWebhookUrl: "",
+  ghlWebhookUrl: "https://services.leadconnectorhq.com/hooks/1BTr0PfdShOJjKXWB7Ab/webhook-trigger/c4e2336d-b38b-4492-91d3-1d09b9d75c23",
 
   // Where people land after registering
   thankYouPage: "thank-you.html"
