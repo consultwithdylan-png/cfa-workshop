@@ -219,3 +219,10 @@ footer .bottom{text-align:center;margin-top:24px}
 .hero h1 .amtline{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.18em;margin:.06em 0 .04em}
 .hero h1 .amtline .amt{display:inline;font-size:1.25em;margin:0}
 .hero h1 .amtline .pm{font-size:.72em}
+/* headline v3 mobile: every line fills the width */
+@media (max-width:600px){
+.hero h1{font-size:calc((100vw - 40px) / 8.75)}
+.hero h1 .pre{font-size:1.1em}
+.hero h1 .nx{display:block;font-size:1.3em;line-height:1}
+.hero h1 .tail{font-size:.82em}
+}
