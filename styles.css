@@ -206,3 +206,11 @@ footer .bottom{text-align:center;margin-top:24px}
 .big4 div{padding:12px 4px;border-color:var(--blue-2);box-shadow:0 0 18px -6px rgba(31,139,255,.7)}
 .big4 b{font-size:44px}
 @media (max-width:860px){.datebar{font-size:13px}.bigcd{text-align:center;margin-left:auto;margin-right:auto}.big4 b{font-size:36px}}
+/* extra CTAs + red live dot */
+.cta-row{margin-top:40px;text-align:center}
+.cta-row small{display:block;margin-top:10px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+#register{scroll-margin-top:80px}
+.datebar .dot{background:#ff3b3b;box-shadow:0 0 0 0 rgba(255,59,59,.7);animation:livedot 1.2s ease-in-out infinite}
+@keyframes livedot{0%{opacity:1;box-shadow:0 0 0 0 rgba(255,59,59,.75)}50%{opacity:.35}70%{box-shadow:0 0 0 7px rgba(255,59,59,0)}100%{opacity:1;box-shadow:0 0 0 0 rgba(255,59,59,0)}}
+.datebar .dot{width:11px;height:11px;border:2px solid #fff}
+@media (max-width:860px){.panel-head.dup{display:none}}
