@@ -1,17 +1,20 @@
 // ===== Edit these and redeploy =====
 window.CFA_CONFIG = {
-  // Upcoming workshops, oldest first. The page always shows the next one that
-  // hasn't ended yet (each is treated as over 2 hours after its start).
-  // start: ISO date/time with Eastern offset (-05:00 Nov–Mar, -04:00 Mar–Nov)
-  // label: shown on the page and sent to GHL for emails/texts
-  // zoom:  join link sent to GHL with each registration
-  workshops: [
-    {
-      start: "2026-11-07T20:00:00-05:00",
-      label: "Saturday, Nov 7 @ 8:00 PM EST",
-      zoom: "https://us06web.zoom.us/j/89514257607?pwd=wRS4Er2rbsJDrdFR6qlPgX6HvL8UIj.1"
-    }
-  ],
+  // Weekly workshop that repeats on its own. The page always shows the next
+  // upcoming session (a session counts as over 2 hours after it starts).
+  schedule: {
+    weekday: "Saturday",   // Sunday ... Saturday
+    time: "20:00",         // 24-hour clock, Eastern time
+    zoom: "https://us06web.zoom.us/j/89514257607?pwd=wRS4Er2rbsJDrdFR6qlPgX6HvL8UIj.1",
+    skip: []               // weeks you're off, e.g. ["2026-11-28"]
+  },
+
+  // Optional one-off sessions on a different day/time. They're mixed in with
+  // the weekly ones; leave empty if you don't need any.
+  // { start: "2026-12-03T19:00:00-05:00", zoom: "https://..." }
+  // (Eastern offset: -05:00 Nov–Mar, -04:00 Mar–Nov)
+  workshops: [],
+
   workshopLengthHours: 2,
 
   // GoHighLevel inbound webhook URL (Automation > Workflow > Inbound Webhook trigger).
