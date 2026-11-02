@@ -189,3 +189,6 @@ footer .bottom{text-align:center;margin-top:24px}
   .reason .big{font-size:30px;margin-bottom:2px}
   .reason p{font-size:15px;font-weight:500;color:#cfe0ff}
 }
+/* hero headline v2 */
+.hero h1 .amt{display:block;font-size:1.8em;line-height:.92;margin:.06em 0 .04em;letter-spacing:-.005em}
+.hero h1 .tail{display:block;font-size:.72em;margin-top:.3em}
