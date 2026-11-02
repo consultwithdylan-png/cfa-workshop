@@ -5,16 +5,23 @@
     el.textContent = C.workshopLabel || "Date & time announced soon";
   });
 
-  // Countdown
-  var cd = document.getElementById("countdown");
+  // Countdowns: every [data-cd] element (top bar, under video, form)
   var start = C.workshopStart ? new Date(C.workshopStart) : null;
-  if (cd && start && !isNaN(start)) {
+  var cds = document.querySelectorAll("[data-cd]");
+  if (cds.length && start && !isNaN(start)) {
+    var pad = function (n) { return String(n).padStart(2, "0"); };
     var tick = function () {
       var s = Math.max(0, Math.floor((start - new Date()) / 1000));
-      var parts = [Math.floor(s / 86400), Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60];
-      cd.querySelectorAll("b").forEach(function (b, i) { b.textContent = String(parts[i]).padStart(2, "0"); });
+      var p = [Math.floor(s / 86400), Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60];
+      cds.forEach(function (el) {
+        var box = el.classList.contains("countdown") ? el : el.querySelector(".countdown");
+        if (box) box.querySelectorAll("b").forEach(function (b, i) { b.textContent = pad(p[i]); });
+        var t = el.querySelector(".cdt");
+        if (t) t.textContent = s > 0 ? pad(p[0]) + "d : " + pad(p[1]) + "h : " + pad(p[2]) + "m : " + pad(p[3]) + "s" : "LIVE NOW";
+      });
     };
-    cd.hidden = false; tick(); setInterval(tick, 1000);
+    cds.forEach(function (el) { el.hidden = false; });
+    tick(); setInterval(tick, 1000);
   }
 
   // Registration form -> GoHighLevel inbound webhook

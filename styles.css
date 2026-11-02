@@ -193,3 +193,16 @@ footer .bottom{text-align:center;margin-top:24px}
 .hero h1 .amt{display:block;font-size:1.8em;line-height:.92;margin:.06em 0 .04em;letter-spacing:-.005em}
 .hero h1 .tail{display:block;font-size:.72em;margin-top:.3em}
 .hero h1 .pre{display:block;font-size:.8em}
+/* date bar + countdowns */
+.datebar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 18px;padding:10px 16px;font-size:15px;letter-spacing:.06em;box-shadow:0 6px 24px -10px rgba(0,0,0,.7)}
+.datebar b{font-weight:700}
+.datebar .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:8px;vertical-align:1px;animation:pulse 1.6s infinite}
+.datebar .cdt{color:#ffe27a;font-variant-numeric:tabular-nums}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.eyebrow-sm{font:600 14px/1.35 "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.bigcd{margin:22px 0 4px;max-width:600px}
+.bigcd-label{font:600 15px/1 "Barlow Condensed",sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--blue-2);margin-bottom:10px}
+.big4{gap:10px;margin:0}
+.big4 div{padding:12px 4px;border-color:var(--blue-2);box-shadow:0 0 18px -6px rgba(31,139,255,.7)}
+.big4 b{font-size:44px}
+@media (max-width:860px){.datebar{font-size:13px}.bigcd{text-align:center;margin-left:auto;margin-right:auto}.big4 b{font-size:36px}}
