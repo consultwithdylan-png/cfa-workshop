@@ -17,6 +17,11 @@ window.CFA_CONFIG = {
 
   workshopLengthHours: 2,
 
+  // Must match GHL Settings > Business Profile > Time Zone. GHL reads the
+  // reminder time in that zone. (Account is on Pacific right now; if you switch
+  // it to Eastern, change this to "America/New_York".)
+  ghlTimeZone: "America/Los_Angeles",
+
   // GoHighLevel inbound webhook URL (Automation > Workflow > Inbound Webhook trigger).
   ghlWebhookUrl: "https://services.leadconnectorhq.com/hooks/1BTr0PfdShOJjKXWB7Ab/webhook-trigger/4488126d-6ea2-4080-b360-fb0549a64e36",
 

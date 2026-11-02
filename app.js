@@ -51,9 +51,11 @@
     var p = parts(d, { weekday: "long", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
     return p.weekday + ", " + p.month + " " + p.day + " @ " + p.hour + ":" + p.minute + " " + p.dayPeriod + " " + p.timeZoneName;
   };
-  // "MM-DD-YYYY HH:MM" in Eastern time, the format GHL date fields accept
+  // "MM-DD-YYYY HH:MM" in the GHL account's time zone (what its Event Start Date reads)
   var ghlDate = function (d) {
-    var p = parts(d, NUM);
+    var p = {};
+    new Intl.DateTimeFormat("en-US", Object.assign({ timeZone: C.ghlTimeZone || TZ }, NUM))
+      .formatToParts(d).forEach(function (x) { p[x.type] = x.value; });
     return p.month + "-" + p.day + "-" + p.year + " " + p.hour + ":" + p.minute;
   };
   if (W) { W.label = W.label || label(W.date); C.workshopStart = W.date.toISOString(); C.workshopLabel = W.label; }
