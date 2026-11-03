@@ -11,13 +11,13 @@
   var STUDENTS = [
     { name: "Nick", id: "1Z6J4BZFjaQ", line: "Scaled to over $100k in a single month", x: 205, y: 290, shirt: "#e8833a", skin: "#f1c27d", hair: "#3b2a1a" },
     { name: "Luke", id: "1AD1dkhRoA0", line: "Made over $200k in his first full year", x: 345, y: 205, shirt: "#2bb673", skin: "#e0ac69", hair: "#6b4423" },
-    { name: "Jared", id: "tI9C-mhf1P4", line: "Hear Jared's story", x: 550, y: 265, shirt: "#9b5de5", skin: "#c68642", hair: "#1b1b1b" },
+    { name: "Jared", id: "tI9C-mhf1P4", line: "Lost his high-paying government job, now making big money with couches", x: 550, y: 265, shirt: "#9b5de5", skin: "#c68642", hair: "#1b1b1b" },
     { name: "Keon", id: "08neLxi2O70", line: "Mechanic to full-time flipper: $87k in 5 months", x: 760, y: 205, shirt: "#f15bb5", skin: "#8d5524", hair: "#111" },
     { name: "Korben", id: "WuWjqxkriXI", line: "Over $50k in his first year, still in high school", x: 895, y: 290, shirt: "#fee440", skin: "#f1c27d", hair: "#a0522d" },
     { name: "Charles", id: "2va_p0bHc2c", line: "“Dylan has helped MANY flippers take their business to new heights!”", x: 420, y: 375, shirt: "#00bbf9", skin: "#8d5524", hair: "#111" },
     { name: "Jacob", id: "J_PNlIKEieg", line: "From standstill to a record-breaking month", x: 680, y: 375, shirt: "#ff595e", skin: "#e0ac69", hair: "#4a3020" },
-    { name: "Brian", id: "AursKf5fDu4", line: "Hear Brian's story", x: 205, y: 490, shirt: "#8ac926", skin: "#c68642", hair: "#2a1a0f" },
-    { name: "Cody", id: "aJC1ueLAHWI", line: "Hear Cody's story", x: 895, y: 490, shirt: "#ffca3a", skin: "#f1c27d", hair: "#c68a3a" }
+    { name: "Brian", id: "AursKf5fDu4", line: "Was a teacher, now makes $3,000–$5,000 per week selling couches", x: 205, y: 490, shirt: "#8ac926", skin: "#c68642", hair: "#2a1a0f" },
+    { name: "Cody", id: "aJC1ueLAHWI", line: "\u201cDylan made the process super simple and easy to understand\u201d", x: 895, y: 490, shirt: "#ffca3a", skin: "#f1c27d", hair: "#c68a3a" }
   ];
 
   var W = 1100, H = 700;        // world size
