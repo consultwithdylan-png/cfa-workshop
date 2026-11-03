@@ -39,13 +39,21 @@
   var cam = { x: 0, y: 0 }, scale = 1, vw = 0, vh = 0, dpr = 1;
   var touch = matchMedia("(pointer: coarse)").matches;
 
-  hintEl.textContent = touch ? "Tap anywhere to walk • Tap a person to hear their story" : "Arrow keys / WASD to walk • E to watch • or just click where to go";
+  hintEl.textContent = touch ? "Use the joystick or tap anywhere to walk • Tap a person to hear their story" : "Joystick, arrow keys / WASD, or click to walk • E to watch";
 
   function resize() {
-    var cssW = box.clientWidth;
-    var cssH;
-    if (cssW >= 600) { scale = cssW / W; cssH = Math.round(H * scale); }   // wide: whole room fits
-    else { scale = 0.55; cssH = Math.round(Math.min(520, Math.max(380, cssW * 1.15))); } // phone: camera follows you
+    var pw = box.parentElement.clientWidth, cssW = pw, cssH;
+    // room for the game = what's left of the first screen below the header (+ the hint line under it)
+    var avail = window.innerHeight - (box.getBoundingClientRect().top + window.scrollY) - 34;
+    if (cssW >= 600) {                                       // wide: whole room fits on screen
+      cssH = Math.round(Math.max(360, Math.min(H * pw / W, avail)));
+      cssW = Math.min(pw, Math.round(cssH * W / H));          // shrink the box to the room, no empty bands
+      scale = cssW / W; cssH = Math.round(H * scale);
+      box.style.width = cssW + "px";
+    } else {
+      box.style.width = "";                                                 // phone: camera follows you
+      scale = 0.55; cssH = Math.round(Math.max(330, Math.min(520, cssW * 1.15, avail)));
+    }
     dpr = Math.min(2, window.devicePixelRatio || 1);
     cv.style.height = cssH + "px";
     cv.width = Math.round(cssW * dpr); cv.height = Math.round(cssH * dpr);
@@ -101,8 +109,26 @@
   });
 
   startEl.addEventListener("click", function () {
-    active = true; startEl.hidden = true; cv.focus({ preventScroll: true });
+    active = true; startEl.hidden = true; box.classList.add("on"); cv.focus({ preventScroll: true });
   });
+
+  // ---- joystick ----
+  var joyEl = box.querySelector(".joy"), knob = joyEl.querySelector(".joy-knob"), joy = { x: 0, y: 0 }, joyId = null;
+  function joyMove(e) {
+    var r = joyEl.getBoundingClientRect(), R = r.width / 2;
+    var x = e.clientX - (r.left + R), y = e.clientY - (r.top + R), d = Math.hypot(x, y), max = R - 14;
+    if (d > max) { x = x / d * max; y = y / d * max; }
+    knob.style.transform = "translate(" + x + "px," + y + "px)";
+    joy.x = x / max; joy.y = y / max;
+  }
+  function joyEnd() { joyId = null; joy.x = joy.y = 0; knob.style.transform = ""; }
+  joyEl.addEventListener("pointerdown", function (e) {
+    e.stopPropagation(); e.preventDefault(); joyId = e.pointerId; target = null; pendingOpen = null;
+    try { joyEl.setPointerCapture(e.pointerId); } catch (err) {}
+    joyMove(e);
+  });
+  joyEl.addEventListener("pointermove", function (e) { if (e.pointerId === joyId) joyMove(e); });
+  joyEl.addEventListener("pointerup", joyEnd); joyEl.addEventListener("pointercancel", joyEnd);
 
   // ---- video modal ----
   var modal = document.getElementById("vid-modal"), vidFrame = modal.querySelector(".vid-frame");
@@ -210,9 +236,11 @@
   var last = performance.now();
   function frame(t) {
     var dt = Math.min(0.05, (t - last) / 1000); last = t;
-    var sp = 200 * dt, dx = 0, dy = 0;
+    var sp = 200 * dt, dx = 0, dy = 0, jm = 0;
     if (active && !modalOpen()) {
       if (keys.l) dx -= 1; if (keys.r) dx += 1; if (keys.u) dy -= 1; if (keys.d) dy += 1;
+      jm = Math.hypot(joy.x, joy.y);
+      if (!dx && !dy && jm > 0.15) { dx = joy.x; dy = joy.y; target = null; pendingOpen = null; }
       if (!dx && !dy && target) {
         var tx = target.x - player.x, ty = target.y - player.y, d = Math.hypot(tx, ty);
         if (d < 4) { target = null; if (pendingOpen) { var n = pendingOpen; pendingOpen = null; openVideo(n); } }
@@ -220,7 +248,8 @@
       }
     }
     if (dx || dy) {
-      var len = Math.hypot(dx, dy); dx = dx / len * sp; dy = dy / len * sp;
+      var len = Math.hypot(dx, dy), k = (jm > 0.15 && !keys.l && !keys.r && !keys.u && !keys.d) ? Math.min(1, jm) : 1;
+      dx = dx / len * sp * k; dy = dy / len * sp * k;
       player.moving = move(dx, dy);
       if (!player.moving && target) { target = null; if (pendingOpen) { var p2 = pendingOpen; pendingOpen = null; if (Math.hypot(player.x - p2.x, player.y - p2.y) < 90) openVideo(p2); } }
       if (dx) player.dir = dx > 0 ? 1 : -1;

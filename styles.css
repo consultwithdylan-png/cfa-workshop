@@ -258,3 +258,57 @@ footer .bottom{text-align:center;margin-top:24px}
 .room-prompt span{font-size:12.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .room-prompt button{padding:8px 12px;font-size:18px}
 }
+
+/* thank-you v2: compact header so the game is visible right away, joystick */
+.ty-top{padding:14px 0 10px}
+.ty-top .ty-logo{height:30px;width:auto;margin:0 auto 8px;display:block}
+.ty-top .ty-kicker{font-size:12px;margin-bottom:6px}
+.ty-top .ty-kicker::before,.ty-top .ty-kicker::after{width:40px}
+.ty-h1{font-size:clamp(28px,3.4vw,40px);margin:0 0 4px}
+.ty-sub{font-size:14px;margin:0 0 8px}
+.ty-checks{list-style:none;margin:0 auto;padding:0;display:flex;flex-wrap:wrap;gap:6px 8px;justify-content:center}
+.ty-checks li{font:600 13px/1.25 "Barlow Condensed","Inter",sans-serif;letter-spacing:.03em;text-transform:uppercase;background:rgba(31,139,255,.12);border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 26px;position:relative;text-align:left}
+.ty-checks li::before{content:"\2713";position:absolute;left:10px;top:5px;color:var(--blue-2)}
+.lounge{padding:14px 0 60px}
+.ty-h2{font-size:clamp(22px,2.6vw,30px);margin:0 0 2px}
+.ty-sub2{font-size:14px;margin:0 0 10px}
+/* keep the whole room on screen on laptops */
+.joy{position:absolute;left:14px;bottom:14px;width:96px;height:96px;border-radius:50%;background:rgba(5,13,38,.55);border:2px solid rgba(95,212,255,.55);box-shadow:0 0 18px -4px rgba(31,139,255,.8);touch-action:none;z-index:3;display:none}
+.room.on .joy{display:block}
+.joy-knob{position:absolute;left:50%;top:50%;width:42px;height:42px;margin:-21px 0 0 -21px;border-radius:50%;background:linear-gradient(180deg,#5fd4ff,#1f8bff);box-shadow:0 4px 12px rgba(0,0,0,.4);pointer-events:none}
+.room-prompt{top:12px;bottom:auto}
+@media (max-width:600px){
+.ty-checks li{font-size:12px;padding:4px 10px 4px 24px}
+.ty-checks li::before{top:4px;left:9px}
+.room{min-width:0}
+.room-prompt{top:8px;bottom:auto}
+.joy{width:88px;height:88px;left:10px;bottom:10px}
+}
+/* thank-you v2b: tighter header */
+.ty-top{padding:10px 0 6px}
+.ty-top .ty-logo{height:24px;margin-bottom:4px}
+.ty-top .ty-kicker{font-size:11px;margin-bottom:2px}
+.ty-h1{font-size:clamp(26px,3vw,36px);margin-bottom:2px}
+.ty-sub{font-size:13px;margin-bottom:6px}
+.ty-checks li{font-size:12px;padding:3px 10px 3px 24px}
+.ty-checks li::before{top:3px;left:9px}
+.lounge{padding:8px 0 60px}
+.ty-h2{font-size:clamp(20px,2.2vw,26px)}
+.ty-sub2{font-size:13px;margin-bottom:8px}
+@media (max-width:600px){
+.bar{font-size:12px;padding:6px 10px}
+.ty-top .ty-logo{height:20px}
+.ty-h1{font-size:24px}
+.ty-sub{font-size:12px;line-height:1.35}
+.ty-checks{gap:4px}
+.ty-checks li{font-size:11px;line-height:1.2;padding:3px 8px 3px 20px}
+.ty-checks li::before{left:7px}
+.ty-sub2{display:none}
+}
+@media (max-width:600px){
+.room-prompt{padding:6px 8px;gap:8px}
+.room-prompt b{font-size:16px}
+.room-prompt span{font-size:11px}
+.room-prompt button{padding:6px 10px;font-size:16px}
+}
+.room{margin-left:auto;margin-right:auto}
