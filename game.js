@@ -22,16 +22,33 @@
 
   var W = 1100, H = 700;        // world size
   var WALL = 96;                // top wall depth
+  // furniture-store showroom: display couches with price tags
   var couches = [
-    { x: 120, y: 160, w: 170, h: 62, c: "#4a5a7a" },
-    { x: 810, y: 160, w: 170, h: 62, c: "#2f6f6a" },
-    { x: 470, y: 300, w: 160, h: 62, c: "#6b3a4a" },
-    { x: 120, y: 560, w: 170, h: 62, c: "#2f6f6a" },
-    { x: 810, y: 560, w: 170, h: 62, c: "#4a5a7a" }
+    // back wall
+    { x: 40, y: 108, w: 150, h: 56, c: "#7a6a58", tag: "$650" },
+    { x: 290, y: 108, w: 120, h: 56, c: "#3f5f8a", n: 2, tag: "SOLD", tagL: true },
+    { x: 480, y: 108, w: 140, h: 56, c: "#8a4a3a", tag: "$480" },
+    { x: 690, y: 108, w: 120, h: 56, c: "#4f7a5a", n: 2, tag: "SOLD", tagL: true },
+    { x: 910, y: 108, w: 150, h: 56, c: "#5a5a66", tag: "$720" },
+    // floor displays
+    { x: 120, y: 175, w: 170, h: 62, c: "#4a5a7a", tag: "$550", rug: "#3a2f4a" },
+    { x: 810, y: 175, w: 170, h: 62, c: "#2f6f6a", tag: "SOLD", rug: "#2a3a3a" },
+    { x: 470, y: 300, w: 160, h: 62, c: "#6b3a4a", tag: "$900", rug: "#1f3a6a" },
+    { x: 40, y: 330, w: 62, h: 56, c: "#a07a3a", n: 1, tag: "$180" },
+    { x: 998, y: 330, w: 62, h: 56, c: "#7a3a5a", n: 1, tag: "SOLD" },
+    { x: 290, y: 430, w: 110, h: 52, c: "#5a6a3a", n: 2, tag: "$320" },
+    { x: 700, y: 430, w: 110, h: 52, c: "#3a4a6a", n: 2, tag: "$350" },
+    { x: 120, y: 560, w: 170, h: 62, c: "#2f6f6a", tag: "SOLD", rug: "#2a2f45" },
+    { x: 810, y: 560, w: 170, h: 62, c: "#4a5a7a", tag: "$600", rug: "#3a2f2a" },
+    { x: 350, y: 600, w: 62, h: 56, c: "#8a5a3a", n: 1, tag: "$150" }
   ];
   var tables = [{ x: 500, y: 388, w: 100, h: 34 }];
-  var plants = [{ x: 46, y: 130 }, { x: 1054, y: 130 }, { x: 46, y: 660 }, { x: 1054, y: 660 }];
-  var solids = couches.concat(tables).concat(plants.map(function (p) { return { x: p.x - 18, y: p.y - 18, w: 36, h: 36 }; }));
+  var counter = { x: 650, y: 610, w: 130, h: 44 };
+  var plants = [{ x: 230, y: 130 }, { x: 870, y: 130 }, { x: 46, y: 660 }, { x: 1054, y: 660 }];
+  var lamps = [{ x: 440, y: 130 }, { x: 650, y: 130 }, { x: 70, y: 450 }, { x: 1030, y: 450 }];
+  var solids = couches.concat(tables).concat([counter])
+    .concat(plants.map(function (p) { return { x: p.x - 18, y: p.y - 18, w: 36, h: 36 }; }))
+    .concat(lamps.map(function (p) { return { x: p.x - 10, y: p.y - 10, w: 20, h: 20 }; }));
 
   var player = { x: 550, y: 640, r: 14, dir: 1, walk: 0, moving: false };
   var target = null, pendingOpen = null, near = null, active = false;
@@ -163,47 +180,77 @@
   // ---- drawing ----
   function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
   function drawFloor() {
-    ctx.fillStyle = "#081636"; ctx.fillRect(0, 0, W, H);
-    ctx.strokeStyle = "rgba(80,160,255,.08)"; ctx.lineWidth = 1;
-    for (var x = 0; x <= W; x += 50) { ctx.beginPath(); ctx.moveTo(x, WALL); ctx.lineTo(x, H); ctx.stroke(); }
-    for (var y = WALL; y <= H; y += 50) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-    // rug
-    rr(400, 270, 300, 180, 18); ctx.fillStyle = "rgba(31,139,255,.10)"; ctx.fill();
+    // wood showroom floor
+    ctx.fillStyle = "#2a1f18"; ctx.fillRect(0, 0, W, H);
+    for (var y = WALL, row = 0; y < H; y += 28, row++) {
+      ctx.fillStyle = row % 2 ? "#2e2219" : "#33261c"; ctx.fillRect(0, y, W, 28);
+      ctx.fillStyle = "rgba(0,0,0,.25)"; ctx.fillRect(0, y, W, 1);
+      for (var x = (row % 3) * 70; x < W; x += 210) ctx.fillRect(x, y, 1, 28);
+    }
+    // rugs under the floor displays
+    couches.forEach(function (c) {
+      if (!c.rug) return;
+      rr(c.x - 22, c.y - 14, c.w + 44, c.h + 46, 8); ctx.fillStyle = c.rug; ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,.12)"; ctx.lineWidth = 2; rr(c.x - 16, c.y - 8, c.w + 32, c.h + 34, 6); ctx.stroke();
+    });
+    rr(400, 270, 300, 180, 18); ctx.fillStyle = "rgba(31,139,255,.16)"; ctx.fill();
     ctx.strokeStyle = "rgba(95,212,255,.35)"; ctx.lineWidth = 2; ctx.setLineDash([8, 6]); ctx.stroke(); ctx.setLineDash([]);
     // walls
-    ctx.fillStyle = "#050d26"; ctx.fillRect(0, 0, W, WALL);
-    ctx.fillStyle = "#0b1d4d"; ctx.fillRect(0, WALL - 10, W, 10);
-    ctx.fillStyle = "#050d26"; ctx.fillRect(0, WALL, 12, H); ctx.fillRect(W - 12, WALL, 12, H); ctx.fillRect(0, H - 12, W, 12);
-    // door gap at bottom
-    ctx.fillStyle = "#1f8bff"; ctx.fillRect(505, H - 12, 90, 12);
-    // neon sign
+    ctx.fillStyle = "#0a1a44"; ctx.fillRect(0, 0, W, WALL);
+    ctx.fillStyle = "#e8e1d4"; ctx.fillRect(0, WALL - 10, W, 10);                                // baseboard
+    ctx.fillStyle = "#0a1a44"; ctx.fillRect(0, WALL, 12, H); ctx.fillRect(W - 12, WALL, 12, H); ctx.fillRect(0, H - 12, W, 12);
+    ctx.fillStyle = "#1f8bff"; ctx.fillRect(505, H - 12, 90, 12);                               // front door
+    // store sign
     ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.font = "44px 'Bebas Neue', Impact, sans-serif";
+    ctx.font = "40px 'Bebas Neue', Impact, sans-serif";
     ctx.shadowColor = "#38b6ff"; ctx.shadowBlur = 18; ctx.fillStyle = "#bfe9ff";
-    ctx.fillText("THE WALL OF WINS", W / 2, 40);
+    ctx.fillText("COUCH FLIPPING ACADEMY FURNITURE", W / 2, 38, 600);
     ctx.shadowBlur = 0; ctx.font = "16px 'Barlow Condensed', sans-serif"; ctx.fillStyle = "#7fa6d9";
-    ctx.fillText("COUCH FLIPPING ACADEMY • STUDENT LOUNGE", W / 2, 72);
+    ctx.fillText("SHOWROOM • MEET OUR STUDENTS • WALL OF WINS", W / 2, 70);
     ctx.restore();
-    // framed "photos" on wall
-    [[110, 22], [230, 22], [810, 22], [930, 22]].forEach(function (p) {
-      ctx.fillStyle = "#0e2a63"; ctx.fillRect(p[0], p[1], 60, 44);
-      ctx.strokeStyle = "#38b6ff"; ctx.lineWidth = 2; ctx.strokeRect(p[0], p[1], 60, 44);
-      ctx.fillStyle = "#38b6ff"; ctx.font = "20px 'Bebas Neue', sans-serif"; ctx.textAlign = "center"; ctx.fillText("$", p[0] + 30, p[1] + 30);
+    // wall banners
+    [[40, "SALE"], [130, "NEW"], [906, "SOLD!"], [996, "OPEN"]].forEach(function (b) {
+      ctx.fillStyle = b[1] === "SALE" || b[1] === "SOLD!" ? "#d63a3a" : "#1f8bff"; ctx.fillRect(b[0], 18, 64, 40);
+      ctx.fillStyle = "#fff"; ctx.font = "20px 'Bebas Neue', Impact, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(b[1], b[0] + 32, 39, 56);
     });
   }
   function drawCouch(c) {
+    var n = c.n || 3;
     ctx.fillStyle = "rgba(0,0,0,.35)"; rr(c.x + 4, c.y + 8, c.w, c.h, 10); ctx.fill();
     ctx.fillStyle = shade(c.c, -25); rr(c.x, c.y, c.w, 24, 10); ctx.fill();                  // back
     ctx.fillStyle = c.c; rr(c.x, c.y + 16, c.w, c.h - 16, 8); ctx.fill();                     // seat
     ctx.fillStyle = shade(c.c, -35); rr(c.x - 6, c.y + 10, 16, c.h - 8, 6); ctx.fill(); rr(c.x + c.w - 10, c.y + 10, 16, c.h - 8, 6); ctx.fill();
     ctx.strokeStyle = shade(c.c, -15); ctx.lineWidth = 2;
-    var n = 3, cw = (c.w - 20) / n;
+    var cw = (c.w - 20) / n;
     for (var i = 1; i < n; i++) { ctx.beginPath(); ctx.moveTo(c.x + 10 + cw * i, c.y + 22); ctx.lineTo(c.x + 10 + cw * i, c.y + c.h - 6); ctx.stroke(); }
+    if (n > 1) { ctx.fillStyle = shade(c.c, 30); rr(c.x + 14, c.y + 6, 18, 14, 4); ctx.fill(); rr(c.x + c.w - 32, c.y + 6, 18, 14, 4); ctx.fill(); } // pillows
+    if (c.tag) {                                                                                  // price tag
+      var sold = c.tag === "SOLD", tx, ty = c.y - 6;
+      ctx.font = "13px 'Bebas Neue', Impact, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      var tw = ctx.measureText(c.tag).width + 12; tx = c.tagL ? c.x + tw / 2 + 2 : c.x + c.w - tw / 2 - 2;
+      ctx.fillStyle = sold ? "#d63a3a" : "#fff8e6"; rr(tx - tw / 2, ty, tw, 16, 3); ctx.fill();
+      ctx.fillStyle = sold ? "#fff" : "#1c2440"; ctx.fillText(c.tag, tx, ty + 9);
+    }
   }
   function drawTable(t) {
     ctx.fillStyle = "rgba(0,0,0,.35)"; rr(t.x + 3, t.y + 6, t.w, t.h, 6); ctx.fill();
     ctx.fillStyle = "#7a5233"; rr(t.x, t.y, t.w, t.h, 6); ctx.fill();
     ctx.fillStyle = "#1f8bff"; ctx.fillRect(t.x + 30, t.y + 9, 40, 14);                         // laptop
+  }
+  function drawCounter(k) {
+    ctx.fillStyle = "rgba(0,0,0,.35)"; rr(k.x + 4, k.y + 6, k.w, k.h, 6); ctx.fill();
+    ctx.fillStyle = "#e8e1d4"; rr(k.x, k.y, k.w, k.h, 6); ctx.fill();
+    ctx.fillStyle = "#1f8bff"; ctx.fillRect(k.x, k.y + k.h - 10, k.w, 10);
+    ctx.fillStyle = "#1c2440"; rr(k.x + 14, k.y + 6, 34, 22, 3); ctx.fill();                      // register
+    ctx.fillStyle = "#2bb673"; ctx.fillRect(k.x + 18, k.y + 10, 26, 8);
+    ctx.fillStyle = "#1c2440"; ctx.font = "14px 'Bebas Neue', Impact, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("CHECKOUT", k.x + 88, k.y + 18);
+  }
+  function drawLamp(p) {
+    ctx.fillStyle = "rgba(255,214,120,.10)"; ctx.beginPath(); ctx.arc(p.x, p.y, 34, 0, 7); ctx.fill();
+    ctx.fillStyle = "#1c2440"; ctx.fillRect(p.x - 2, p.y - 22, 4, 26); ctx.fillRect(p.x - 8, p.y + 2, 16, 4);
+    ctx.fillStyle = "#ffd678"; ctx.beginPath(); ctx.moveTo(p.x - 12, p.y - 18); ctx.lineTo(p.x + 12, p.y - 18); ctx.lineTo(p.x + 7, p.y - 32); ctx.lineTo(p.x - 7, p.y - 32); ctx.closePath(); ctx.fill();
   }
   function drawPlant(p) {
     ctx.fillStyle = "#5a3b22"; rr(p.x - 14, p.y - 4, 28, 22, 4); ctx.fill();
@@ -274,7 +321,7 @@
     ctx.fillStyle = "#040a1f"; ctx.fillRect(0, 0, cv.width, cv.height);
     ctx.setTransform(dpr * scale, 0, 0, dpr * scale, -cam.x * dpr * scale, -cam.y * dpr * scale);
     drawFloor();
-    couches.forEach(drawCouch); tables.forEach(drawTable); plants.forEach(drawPlant);
+    couches.forEach(drawCouch); tables.forEach(drawTable); drawCounter(counter); lamps.forEach(drawLamp); plants.forEach(drawPlant);
 
     // depth-sort people
     var people = STUDENTS.map(function (n, i) { return { o: n, y: n.y, npc: true, i: i }; });
