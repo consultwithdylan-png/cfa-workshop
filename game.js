@@ -31,22 +31,30 @@
     { x: 690, y: 108, w: 120, h: 56, c: "#4f7a5a", n: 2, tag: "SOLD", tagL: true },
     { x: 910, y: 108, w: 150, h: 56, c: "#5a5a66", tag: "$720" },
     // floor displays
-    { x: 120, y: 175, w: 170, h: 62, c: "#4a5a7a", tag: "$550", rug: "#3a2f4a" },
-    { x: 810, y: 175, w: 170, h: 62, c: "#2f6f6a", tag: "SOLD", rug: "#2a3a3a" },
-    { x: 470, y: 300, w: 160, h: 62, c: "#6b3a4a", tag: "$900", rug: "#1f3a6a" },
+    // L-shaped sectionals
+    { c: "#4a5a7a", tag: "$850", rug: "#3a2f4a", parts: [{ x: 120, y: 175, w: 170, h: 56, back: "t" }, { x: 120, y: 175, w: 56, h: 98, back: "l" }] },
+    { c: "#2f6f6a", tag: "SOLD", rug: "#2a3a3a", parts: [{ x: 810, y: 175, w: 170, h: 56, back: "t" }, { x: 924, y: 175, w: 56, h: 98, back: "r" }] },
+    // U-shaped sectional around the coffee table
+    { c: "#6b3a4a", tag: "$1,200", rug: "#1f3a6a", parts: [{ x: 456, y: 300, w: 188, h: 50, back: "t" }, { x: 456, y: 300, w: 44, h: 130, back: "l" }, { x: 600, y: 300, w: 44, h: 130, back: "r" }] },
     { x: 40, y: 330, w: 62, h: 56, c: "#a07a3a", n: 1, tag: "$180" },
     { x: 998, y: 330, w: 62, h: 56, c: "#7a3a5a", n: 1, tag: "SOLD" },
     { x: 290, y: 430, w: 110, h: 52, c: "#5a6a3a", n: 2, tag: "$320" },
     { x: 700, y: 430, w: 110, h: 52, c: "#3a4a6a", n: 2, tag: "$350" },
-    { x: 120, y: 560, w: 170, h: 62, c: "#2f6f6a", tag: "SOLD", rug: "#2a2f45" },
-    { x: 810, y: 560, w: 170, h: 62, c: "#4a5a7a", tag: "$600", rug: "#3a2f2a" },
+    { c: "#2f6f6a", tag: "SOLD", rug: "#2a2f45", parts: [{ x: 110, y: 610, w: 190, h: 50, back: "b" }, { x: 110, y: 545, w: 50, h: 115, back: "l" }, { x: 250, y: 545, w: 50, h: 115, back: "r" }] },
+    { c: "#4a5a7a", tag: "$950", rug: "#3a2f2a", parts: [{ x: 800, y: 606, w: 180, h: 50, back: "b" }, { x: 930, y: 545, w: 50, h: 111, back: "r" }] },
     { x: 350, y: 600, w: 62, h: 56, c: "#8a5a3a", n: 1, tag: "$150" }
   ];
   var tables = [{ x: 500, y: 388, w: 100, h: 34 }];
   var counter = { x: 650, y: 610, w: 130, h: 44 };
   var plants = [{ x: 230, y: 130 }, { x: 870, y: 130 }, { x: 46, y: 660 }, { x: 1054, y: 660 }];
   var lamps = [{ x: 440, y: 130 }, { x: 650, y: 130 }, { x: 70, y: 450 }, { x: 1030, y: 450 }];
-  var solids = couches.concat(tables).concat([counter])
+  couches.forEach(function (c) {                     // bounding box for sectionals
+    if (!c.parts) return;
+    var x0 = 1e9, y0 = 1e9, x1 = 0, y1 = 0;
+    c.parts.forEach(function (p) { x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x + p.w); y1 = Math.max(y1, p.y + p.h); });
+    c.x = x0; c.y = y0; c.w = x1 - x0; c.h = y1 - y0;
+  });
+  var solids = [].concat.apply([], couches.map(function (c) { return c.parts || [c]; })).concat(tables).concat([counter])
     .concat(plants.map(function (p) { return { x: p.x - 18, y: p.y - 18, w: 36, h: 36 }; }))
     .concat(lamps.map(function (p) { return { x: p.x - 10, y: p.y - 10, w: 20, h: 20 }; }));
 
@@ -215,7 +223,45 @@
       ctx.fillText(b[1], b[0] + 32, 39, 56);
     });
   }
+  function drawSectional(c) {
+    c.parts.forEach(function (p) { ctx.fillStyle = "rgba(0,0,0,.35)"; rr(p.x + 4, p.y + 8, p.w, p.h, 10); ctx.fill(); });
+    c.parts.forEach(function (p) { ctx.fillStyle = c.c; rr(p.x, p.y, p.w, p.h, 8); ctx.fill(); });
+    ctx.fillStyle = shade(c.c, -25);
+    c.parts.forEach(function (p) {
+      var b = 20;
+      if (p.back === "t") rr(p.x, p.y, p.w, b, 8); else if (p.back === "b") rr(p.x, p.y + p.h - b, p.w, b, 8);
+      else if (p.back === "l") rr(p.x, p.y, b, p.h, 8); else rr(p.x + p.w - b, p.y, b, p.h, 8);
+      ctx.fill();
+    });
+    ctx.strokeStyle = shade(c.c, -15); ctx.lineWidth = 2;               // cushion seams
+    c.parts.forEach(function (p) {
+      var horiz = p.back === "t" || p.back === "b", len = horiz ? p.w : p.h, n = Math.max(1, Math.round(len / 60)), st = len / n;
+      for (var i = 1; i < n; i++) {
+        ctx.beginPath();
+        if (horiz) { ctx.moveTo(p.x + st * i, p.y + (p.back === "t" ? 22 : 4)); ctx.lineTo(p.x + st * i, p.y + p.h - (p.back === "t" ? 4 : 22)); }
+        else { ctx.moveTo(p.x + (p.back === "l" ? 22 : 4), p.y + st * i); ctx.lineTo(p.x + p.w - (p.back === "l" ? 4 : 22), p.y + st * i); }
+        ctx.stroke();
+      }
+    });
+    ctx.fillStyle = shade(c.c, 30);                                       // throw pillows
+    c.parts.forEach(function (p) {
+      if (p.back === "t") { rr(p.x + p.w - 34, p.y + 6, 18, 14, 4); ctx.fill(); }
+      else if (p.back === "b") { rr(p.x + p.w / 2 - 9, p.y + p.h - 20, 18, 14, 4); ctx.fill(); }
+      else if (p.back === "l") { rr(p.x + 4, p.y + p.h - 30, 14, 18, 4); ctx.fill(); }
+      else { rr(p.x + p.w - 18, p.y + p.h - 30, 14, 18, 4); ctx.fill(); }
+    });
+    drawTag(c);
+  }
+  function drawTag(c) {
+    if (!c.tag) return;
+    var sold = c.tag === "SOLD", ty = c.y - 6;
+    ctx.font = "13px 'Bebas Neue', Impact, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    var tw = ctx.measureText(c.tag).width + 12, tx = c.tagL ? c.x + tw / 2 + 2 : c.x + c.w - tw / 2 - 2;
+    ctx.fillStyle = sold ? "#d63a3a" : "#fff8e6"; rr(tx - tw / 2, ty, tw, 16, 3); ctx.fill();
+    ctx.fillStyle = sold ? "#fff" : "#1c2440"; ctx.fillText(c.tag, tx, ty + 9);
+  }
   function drawCouch(c) {
+    if (c.parts) return drawSectional(c);
     var n = c.n || 3;
     ctx.fillStyle = "rgba(0,0,0,.35)"; rr(c.x + 4, c.y + 8, c.w, c.h, 10); ctx.fill();
     ctx.fillStyle = shade(c.c, -25); rr(c.x, c.y, c.w, 24, 10); ctx.fill();                  // back
@@ -225,13 +271,7 @@
     var cw = (c.w - 20) / n;
     for (var i = 1; i < n; i++) { ctx.beginPath(); ctx.moveTo(c.x + 10 + cw * i, c.y + 22); ctx.lineTo(c.x + 10 + cw * i, c.y + c.h - 6); ctx.stroke(); }
     if (n > 1) { ctx.fillStyle = shade(c.c, 30); rr(c.x + 14, c.y + 6, 18, 14, 4); ctx.fill(); rr(c.x + c.w - 32, c.y + 6, 18, 14, 4); ctx.fill(); } // pillows
-    if (c.tag) {                                                                                  // price tag
-      var sold = c.tag === "SOLD", tx, ty = c.y - 6;
-      ctx.font = "13px 'Bebas Neue', Impact, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      var tw = ctx.measureText(c.tag).width + 12; tx = c.tagL ? c.x + tw / 2 + 2 : c.x + c.w - tw / 2 - 2;
-      ctx.fillStyle = sold ? "#d63a3a" : "#fff8e6"; rr(tx - tw / 2, ty, tw, 16, 3); ctx.fill();
-      ctx.fillStyle = sold ? "#fff" : "#1c2440"; ctx.fillText(c.tag, tx, ty + 9);
-    }
+    drawTag(c);
   }
   function drawTable(t) {
     ctx.fillStyle = "rgba(0,0,0,.35)"; rr(t.x + 3, t.y + 6, t.w, t.h, 6); ctx.fill();
