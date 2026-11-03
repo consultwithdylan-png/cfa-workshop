@@ -12,11 +12,11 @@
 </head>
 <body>
 <div class="bar">Free Live Training · <span data-when></span></div>
-<section class="slide" style="min-height:80vh">
+<section class="slide" style="padding-bottom:40px">
   <div class="wrap center" style="max-width:760px">
     <img class="logo" style="margin:0 auto 28px" src="https://assets.cdn.filesafe.space/1BTr0PfdShOJjKXWB7Ab/media/68dbce9fb114c4dc3990479c.png" alt="Couch Flipping Academy">
     <div class="kicker">★ Seat reserved ★</div>
-    <h1 id="hi">You're in!</h1>
+    <h1 id="hi">Thank you, you're signed up!</h1>
     <p class="muted" style="font-size:19px">Your access link is on its way to your inbox. Three quick things so you don't miss it:</p>
     <div class="panel lit" style="text-align:left;margin-top:28px">
       <ul class="checks cond">
@@ -25,14 +25,38 @@
         <li>Bring your numbers — know what's left on your debt snowball</li>
       </ul>
     </div>
-    <p style="margin-top:28px"><a href="index.html">← Back to the training page</a></p>
   </div>
 </section>
+<section class="lounge">
+  <div class="wrap center" style="max-width:1000px">
+    <div class="kicker">Hey, before you leave&hellip;</div>
+    <h2>Go talk to some of my <span class="blue">past students</span></h2>
+    <p class="muted" style="font-size:18px;max-width:640px;margin:0 auto 22px">Walk around the lounge and ask them about their results. Walk up to anyone with a <span class="blue">&#9654;</span> over their head to watch their story.</p>
+    <div id="room" class="room">
+      <canvas tabindex="0" aria-label="Game room: walk up to past students to watch their video testimonials"></canvas>
+      <button type="button" class="room-start"><span>&#9654;</span> Enter the student lounge</button>
+      <div class="room-prompt" hidden><div><b class="rp-name"></b><span class="rp-line"></span></div><button type="button">&#9654; Watch</button></div>
+    </div>
+    <div class="room-foot"><span class="room-hint"></span><span id="room-count"></span></div>
+    <div class="room-list"><span>Rather just pick someone?</span>
+      <button type="button" data-student="Nick">Nick</button><button type="button" data-student="Luke">Luke</button><button type="button" data-student="Jared">Jared</button><button type="button" data-student="Keon">Keon</button><button type="button" data-student="Korben">Korben</button><button type="button" data-student="Charles">Charles</button><button type="button" data-student="Jacob">Jacob</button><button type="button" data-student="Brian">Brian</button><button type="button" data-student="Cody">Cody</button>
+    </div>
+    <p style="margin-top:34px"><a href="index.html">&larr; Back to the training page</a></p>
+  </div>
+</section>
+<div id="vid-modal" class="vid-modal" hidden role="dialog" aria-modal="true" aria-label="Student story">
+  <div class="vid-box">
+    <button type="button" class="vid-close" aria-label="Close">&times;</button>
+    <div class="vid-frame"></div>
+    <div class="vid-cap"><b class="vid-name"></b><span class="vid-line"></span></div>
+  </div>
+</div>
 <script src="config.js"></script>
 <script src="app.js"></script>
+<script src="game.js"></script>
 <script>
   var n = new URLSearchParams(location.search).get("name");
-  if (n) document.getElementById("hi").textContent = "You're in, " + n.slice(0, 40) + "!";
+  if (n) document.getElementById("hi").textContent = "Thank you, " + n.slice(0, 40) + ", you're signed up!";
 </script>
 </body>
 </html>
