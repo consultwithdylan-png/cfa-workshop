@@ -312,3 +312,6 @@ footer .bottom{text-align:center;margin-top:24px}
 .room-prompt button{padding:6px 10px;font-size:16px}
 }
 .room{margin-left:auto;margin-right:auto}
+/* joystick on the right for right-handed players */
+.joy{left:auto;right:14px}
+@media (max-width:600px){.joy{left:auto;right:10px}}
