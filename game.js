@@ -212,9 +212,9 @@
     ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
     ctx.font = "40px 'Bebas Neue', Impact, sans-serif";
     ctx.shadowColor = "#38b6ff"; ctx.shadowBlur = 18; ctx.fillStyle = "#bfe9ff";
-    ctx.fillText("COUCH FLIPPING ACADEMY FURNITURE", W / 2, 38, 600);
+    ctx.fillText("COUCH FLIPPING ACADEMY SHOWROOM", W / 2, 38, 600);
     ctx.shadowBlur = 0; ctx.font = "16px 'Barlow Condensed', sans-serif"; ctx.fillStyle = "#7fa6d9";
-    ctx.fillText("SHOWROOM • MEET OUR STUDENTS • WALL OF WINS", W / 2, 70);
+    ctx.fillText("MEET OUR STUDENTS • WALL OF WINS", W / 2, 70);
     ctx.restore();
     // wall banners
     [[40, "SALE"], [130, "NEW"], [906, "SOLD!"], [996, "OPEN"]].forEach(function (b) {
