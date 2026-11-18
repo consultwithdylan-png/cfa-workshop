@@ -320,3 +320,11 @@ footer .bottom{text-align:center;margin-top:24px}
 .sms-ok input{width:16px;height:16px;flex:0 0 16px;margin:2px 0 0;padding:0;accent-color:#1f8bff}
 .sms-ok a{color:inherit;text-decoration:underline}
 .legal .contact{text-align:center;font-size:13px;color:var(--muted);margin:18px 0 6px}
+
+.learn{max-width:600px;margin:24px 0 6px;padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(16,39,106,.55),rgba(7,19,52,.55))}
+.learn-h{font:600 15px/1 "Barlow Condensed",sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+.learn ol{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.learn li{display:flex;gap:14px;align-items:center;font-size:17px;line-height:1.35;color:#e8efff}
+.learn li b{flex:0 0 34px;height:34px;display:grid;place-items:center;border-radius:50%;border:1.5px solid var(--blue-2);color:#fff;font:400 20px/1 "Bebas Neue",sans-serif;box-shadow:0 0 14px rgba(56,182,255,.45)}
+.learn li strong{color:var(--cyan)}
+@media(max-width:600px){.learn{padding:16px}.learn li{font-size:16px}}
